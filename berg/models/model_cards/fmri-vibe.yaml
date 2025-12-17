@@ -9,12 +9,18 @@ creator: your_name
 
 # General description of the model
 description: |
-  Provide a concise but informative description of the model, including:
-   - What kind of neural responses it generates
-   - What dataset it was trained on
-   - The basic approach/architecture
-   - Any notable characteristics or limitations
-   Keep this to 3-5 sentences for readability.
+  # Provide a concise but informative description of the model, including:
+  #  - What kind of neural responses it generates
+  #  - What dataset it was trained on
+  #  - The basic approach/architecture
+  #  - Any notable characteristics or limitations
+  #  Keep this to 3-5 sentences for readability.
+
+  VIBE (Video-Input Brain Encoder for fMRI Response Modeling) is a two-stage Transformer that fuses 
+  multi-modal video, audio, and text features to predict fMRI activity. Representations from open-source 
+  models (Qwen2.5, BEATs, Whisper, SlowFast, V-JEPA) are merged by a modality-fusion transformer and 
+  temporally decoded by a prediction transformer with rotary embeddings. Trained on 65 hours of movie data 
+  from the CNeuroMod dataset and ensembled across 20 seeds
 
 # Input stimulus information
 input:
