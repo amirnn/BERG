@@ -13,11 +13,22 @@ from berg.core.parameter_validator import (
     validate_roi,
 )
 
+from dataclasses import dataclass
+
+@dataclass
+class Config:
+    num_subjects: int
+    features_extractor_llm: str
+    d_model: int
+    depth: int
+
+
 # Load model info from YAML
 def load_model_info():
     yaml_path = os.path.join(os.path.dirname(__file__), "..", "model_cards", "fmri-vibe.yaml")
     with open(os.path.abspath(yaml_path), "r") as f:
         return yaml.safe_load(f)
+
 
 # Load model_info once at the top
 model_info = load_model_info()
@@ -43,8 +54,15 @@ class VIBE(BaseModelInterface):
     MODEL_ID = model_info["model_id"]
     # Extract any validation info from model_info
     VALID_SUBJECTS = model_info["parameters"]["subject"]["valid_values"]
+    # Supported Configs
+    PRETRAINED_CONFIGS: list[Config] = [
+        Config(num_subjects=10, features_extractor_llm="Qwen-0.5B", d_model=32, depth=12),
+        Config(num_subjects=10, features_extractor_llm="Qwen-1.5B", d_model=32, depth=12),
+        Config(num_subjects=10, features_extractor_llm="Qwen-3.5B", d_model=32, depth=12)
+    ]
 
-    def __init__(self, subject: int, selection: Dict, device: str = "auto", berg_dir: Optional[str] = None, **kwargs):
+    def __init__(self, config: Config,
+                 selection: Dict, device: str = "auto", berg_dir: Optional[str] = None, **kwargs):
         """
         Initialize your model with the required parameters.
 
