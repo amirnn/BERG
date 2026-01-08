@@ -37,14 +37,15 @@ model_info = load_model_info()
 register_model(
     model_id=model_info["vibe"],
     module_path="berg.models.fmri.vibe",  # Replace with actual path
-    class_name="VIBE", #TODO
+    class_name="VIBE",  # TODO
     modality=model_info.get("modality", "fmri"),
-    training_dataset=model_info.get("training_dataset", "your_dataset"), #TODO
+    training_dataset=model_info.get("training_dataset", "your_dataset"),  # TODO
     yaml_path=os.path.join(os.path.dirname(__file__), "..", "model_cards", "fmri-vibe.yaml")
 )
 
-#TODO: Improve the name
-#TODO: Implement the class methods
+
+# TODO: Improve the name
+# TODO: Implement the class methods
 class VIBE(BaseModelInterface):
     """
     Your model description here. Explain what this model does, what
@@ -118,7 +119,7 @@ class VIBE(BaseModelInterface):
             raise InvalidParameterError("Parameter 'selection' is required but was not provided")
 
         # Add any other parameter validation here
-    
+
     def load_model(self) -> None:
         """
         Load model weights and prepare for inference.
@@ -142,9 +143,9 @@ class VIBE(BaseModelInterface):
             raise ModelLoadError(f"Failed to load model: {str(e)}")
 
     def generate_response(
-    self,
-    stimulus: np.ndarray,
-    **kwargs) -> np.ndarray:
+            self,
+            stimulus: np.ndarray,
+            **kwargs) -> np.ndarray:
         """
         Generate in silico neural responses for given stimuli.
 
@@ -176,15 +177,14 @@ class VIBE(BaseModelInterface):
             responses = []
 
             for i in range(0, len(stimulus), batch_size):
-                batch = torch.from_numpy(stimulus[i:i+batch_size]).to(self.device)
+                batch = torch.from_numpy(stimulus[i:i + batch_size]).to(self.device)
                 output = self.model(batch)
                 responses.append(output.cpu().numpy())
 
             all_responses = np.concatenate(responses, axis=0)
 
         return all_responses
-    
-    
+
     @classmethod
     def get_metadata(cls, berg_dir=None, subject=None, model_instance=None, roi=None, **kwargs) -> Dict[str, Any]:
         """
@@ -239,9 +239,9 @@ class VIBE(BaseModelInterface):
         filename = os.path.join(
             berg_dir,
             "encoding_models",
-            "modality-<your_modality>",               # e.g., modality-fmri
-            "train_dataset-<your_dataset>",           # e.g., train_dataset-nsd
-            "model-<your_model_id>",                  # e.g., model-vit_b_32
+            "modality-<your_modality>",  # e.g., modality-fmri
+            "train_dataset-<your_dataset>",  # e.g., train_dataset-nsd
+            "model-<your_model_id>",  # e.g., model-vit_b_32
             "metadata",
             f"metadata_sub-{subject:02d}" + (f"_roi-{roi}" if roi else "") + ".npy"
         )
